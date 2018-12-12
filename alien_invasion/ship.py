@@ -34,3 +34,7 @@ class Ship():
 			self.centery+=self.ai_settings.ship_speed_factor		
 		self.rect.centerx=self.centerx
 		self.rect.centery=self.centery
+	def center_ship(self):
+		'''让飞船在屏幕上居中'''
+		self.rect.centerx = self.screen_rect.centerx
+		self.rect.bottom = self.screen_rect.bottom
