@@ -2,6 +2,7 @@ import sys
 import pygame
 from ball import Ball
 from random import randint
+from game_stats import GameStats
 def check_events(ai_settings,screen,board):
 	#监视屏幕和鼠标事件
 	for event in pygame.event.get():
@@ -82,21 +83,24 @@ def remove_balls(ai_settings,screen,balls):
 		#if ball.rect.bottom >= screen.get_rect().bottom:
 		balls.remove(ball)
 
-def check_balls_edges(ai_settings,screen,balls):
-	balls.update()
+def check_balls_edges(ai_settings,screen,balls,stats):
+	#balls.update()
 	for ball in balls.copy():
 		if ball.rect.bottom >= screen.get_rect().bottom:
+			if stats.board_left>0:
+				stats.board_left-=1
+			else:
+				stats.game_active=False
 			return True
 
-def update_balls(ai_settings,screen,board,balls):
+def update_balls(ai_settings,screen,board,balls,stats):
 	'''更新子弹的位置，并删除已消失的子弹'''
 	#更新子弹位置
 	balls.update()
-	collisions = pygame.sprite.spritecollide(board, balls,True)#pygame.sprite.collide_mask
-	if collisions:
+	if pygame.sprite.spritecollide(board, balls,True):
 		#remove_balls(ai_settings, screen, balls)
 		create_ball(ai_settings, screen, balls)
-	if check_balls_edges(ai_settings,screen,balls):
+	if check_balls_edges(ai_settings,screen,balls,stats):
 		remove_balls(ai_settings, screen, balls)
 		create_ball(ai_settings, screen,balls)
 
